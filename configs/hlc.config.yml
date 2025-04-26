@@ -1,0 +1,4 @@
+jobs:
+  - name: "Example Job"
+    command: "echo 'Hello from HLC!'"
+    interval: 5

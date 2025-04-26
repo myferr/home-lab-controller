@@ -1,0 +1,9 @@
+node_modules/
+.hlc/
+.env
+.DS_Store
+*.log
+*.pid
+coverage/
+dist/
+.vscode/

@@ -1,0 +1,24 @@
+{
+  "name": "home-lab-controller",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "hlc": "./bin/hlc.js"
+  },
+  "scripts": {
+    "start": "node ./bin/hlc.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "date-fns": "^4.1.0",
+    "execa": "^8.0.1",
+    "fs-extra": "^11.3.0",
+    "js-yaml": "^4.1.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
