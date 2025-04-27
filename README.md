@@ -13,7 +13,4 @@ Plus, since I'm setting this up on a **Mac Studio M3U** ([link](https://apple.co
 ## Does this work?
 I've tested this thoroughly before committing and am quite sure that it'll work just fine and do what I need it to.
 
-
-
-# Home Lab Controller
-### [📄 Documentation](DOCS.md) • [📝 MIT License](LICENSE)
+#### [Documentation](DOCS.md) • [MIT License](LICENSE)
