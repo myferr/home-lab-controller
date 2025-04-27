@@ -7,7 +7,8 @@ The configuration system uses YML/YAML so it's super simple to create a new inst
 
 
 ## Why open-source this?
-It might be helpful to you or somebody else!
+It could be helpful to someone else that's running a home lab server.
+Plus, since I'm setting this up on a **Mac Studio M3U** ([link](https://apple.com/mac-studio)), having it open-sourced with documentation makes the setup process way easier for me.
 
 ## Does this work?
 I've tested this thoroughly before committing and am quite sure that it'll work just fine and do what I need it to.
