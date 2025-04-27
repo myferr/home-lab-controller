@@ -37,10 +37,10 @@ chmod +x scripts/init.sh
 
 ```bash
 # One-line install (default directory)
-bash <(curl -Ss https://raw.githubusercontent.com/yourusername/home-lab-controller/main/scripts/remote_init.sh)
+bash <(curl -Ss https://raw.githubusercontent.com/myferr/home-lab-controller/main/scripts/remote_init.sh)
 
 # Custom directory
-bash <(curl -Ss <GitHub_Raw>) /path/to/custom-directory
+bash <(curl -Ss https://raw.githubusercontent.com/myferr/home-lab-controller/main/scripts/remote_init.sh) /path/to/custom-directory
 ```
 
 ## Configuration
