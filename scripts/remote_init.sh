@@ -2,7 +2,7 @@
 set -e
 
 # Remote setup using Git
-REPO_URL="https://github.com/yourusername/home-lab-controller.git"
+REPO_URL="https://github.com/myferr/home-lab-controller.git"
 DEFAULT_DIR="home-lab-controller"
 
 # Check for Git
