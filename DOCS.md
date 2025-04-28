@@ -11,6 +11,7 @@ A simple CLI tool for scheduling and managing recurring tasks. Built with Node.j
 - Process monitoring and management
 - Environment-based configuration
 - System resource tracking
+- Gist YAML configuration support
 
 ## Prerequisites
 
@@ -77,17 +78,30 @@ HLC_MAX_CONCURRENT_JOBS=5
 
 ```bash
 # Start service with single command
-./bin/hlc.js start --command "node my-script.js" --interval <INTERVAL>
-
-# Use configuration file
-./bin/hlc.js start --config configs/hlc.config.yml
-
-# Daemon mode
-./bin/hlc.js start --daemon --config configs/production.config.yml
-
-# Stop service
-./bin/hlc.js stop
+npx hlc start --command "node my-script.js" --interval <INTERVAL>
 ```
+```bash
+# Use configuration file
+npx hlc start --config configs/hlc.config.yml
+```
+```bash
+# Daemon mode
+npx hlc start --daemon --config configs/production.config.yml
+```
+```bash
+# Stop service
+npx hlc stop
+```
+
+> [!NOTE]
+> [Learn more about Gist mode]
+```bash
+# Gist mode
+npx hlc gist --id <GIST_ID>
+```
+
+### Gist mode
+You can run [GitHub Gists](https://gist.github.com) as YML/YAML configuration files for **home-lab-controller** using a single-line command and just describing your Gist ID, right now the only tested instances were **public** gists.
 
 ## License 📄
 
