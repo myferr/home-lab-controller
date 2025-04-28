@@ -94,7 +94,7 @@ npx hlc stop
 ```
 
 > [!NOTE]
-> [Learn more about Gist mode]
+> [Learn more about Gist mode](https://github.com/myferr/home-lab-controller/blob/main/DOCS.md#gist-mode) below.
 ```bash
 # Gist mode
 npx hlc gist --id <GIST_ID>
