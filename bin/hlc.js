@@ -1,10 +1,47 @@
 #!/usr/bin/env node
+
 import { program } from "commander";
 import { startService } from "../src/scheduler.js";
 import { daemonize } from "../src/daemon.js";
 import { loadConfig } from "../src/config-loader.js";
 import { logger } from "../src/logger.js";
-import { cleanupProcesses } from "../src/process-manager.js"; // Added missing import
+import { cleanupProcesses } from "../src/process-manager.js";
+import axios from "axios";
+import YAML from "yaml";
+import { spawn } from "child_process";
+
+let runningProcesses = [];
+
+function stopAllProcesses() {
+  runningProcesses.forEach((proc) => {
+    if (!proc.killed) {
+      proc.kill();
+    }
+  });
+  runningProcesses = [];
+  logger.info("🛑 Stopped all running instances.");
+}
+
+function startInstances(jobs) {
+  jobs.forEach((job) => {
+    logger.info(`🚀 Starting instance '${job.name}'...`);
+    const instance = spawn("bash", ["-c", job.command], { stdio: "inherit" });
+
+    runningProcesses.push(instance);
+  });
+}
+
+// Function to fetch and parse remote YAML
+async function fetchRemoteConfig(url) {
+  try {
+    const response = await axios.get(url);
+    const config = YAML.parse(response.data);
+    return config.jobs || [];
+  } catch (error) {
+    logger.error("❌ Failed to fetch remote configuration:", error.message);
+    process.exit(1);
+  }
+}
 
 program
   .name("hlc")
@@ -61,6 +98,71 @@ program
     // Implement stop logic
     logger.info("Stop command received");
     cleanupProcesses();
+  });
+
+program
+  .command("gist")
+  .description("Fetch and run jobs from a GitHub Gist")
+  .requiredOption("--id <id>", "GitHub Gist ID")
+  .action(async (options) => {
+    let latestSha = null;
+    let currentJobs = [];
+
+    async function fetchAndUpdate() {
+      try {
+        const gistUrl = `https://api.github.com/gists/${options.id}`;
+        const response = await axios.get(gistUrl);
+        const gistData = response.data;
+
+        // Get first file's raw URL
+        const files = Object.values(gistData.files);
+        if (files.length === 0) {
+          logger.error("❌ No files found in Gist");
+          return;
+        }
+        const rawUrl = files[0].raw_url;
+
+        // Fetch YAML config
+        const yamlResponse = await axios.get(rawUrl);
+        const config = YAML.parse(yamlResponse.data);
+        const jobs = config.jobs || [];
+        const currentSha = gistData.history[0].version;
+
+        if (latestSha === null) {
+          // Initial setup
+          latestSha = currentSha;
+          currentJobs = jobs;
+          logger.info("✅ Initial configuration loaded from Gist");
+          startInstances(currentJobs);
+        } else if (currentSha !== latestSha) {
+          logger.info("🔄 Detected new commit - restarting instances...");
+          latestSha = currentSha;
+          currentJobs = jobs;
+          stopAllProcesses();
+          startInstances(currentJobs);
+        } else {
+          logger.info("🔍 No changes detected in Gist");
+        }
+      } catch (error) {
+        logger.error(`❌ Gist update failed: ${error.message}`);
+      }
+    }
+
+    // Initial fetch
+    await fetchAndUpdate();
+
+    // Check for updates every 60 seconds
+    const interval = setInterval(fetchAndUpdate, 60 * 1000);
+    logger.info("🔎 Monitoring Gist for changes every 60 seconds");
+
+    // Cleanup on exit
+    const handleExit = () => {
+      clearInterval(interval);
+      cleanupProcesses();
+      process.exit();
+    };
+    process.on("SIGINT", handleExit);
+    process.on("SIGTERM", handleExit);
   });
 
 program.parse();
