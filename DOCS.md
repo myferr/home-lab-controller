@@ -103,6 +103,8 @@ npx hlc gist --id <GIST_ID>
 ### Gist mode
 You can run [GitHub Gists](https://gist.github.com) as YML/YAML configuration files for **home-lab-controller** using a single-line command and just describing your Gist ID, right now the only tested instances were **public** gists.
 
+The GitHub API is used every 60 seconds (1 minute) to check the `updated_at` key, if your Gist configuration file was updated and it's noticed then all instances will be stopped and restarted with the updated YML/YAML file.
+
 ## License 📄
 
 This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.
