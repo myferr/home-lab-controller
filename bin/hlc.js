@@ -144,8 +144,12 @@ program
           logger.info("🔍 No changes detected in Gist");
         }
       } catch (error) {
-        logger.error(`❌ Gist update failed: ${error.message}`);
-      }
+        if (error.code == "ENOTFOUND") {
+          logger.error("❌ Gist ID is not valid. ENOTFOUND api.github.com");
+          process.exit(0);
+        } else {
+          logger.error(`❌ Gist update failed: ${error.message}`);
+        }      }
     }
 
     // Initial fetch
